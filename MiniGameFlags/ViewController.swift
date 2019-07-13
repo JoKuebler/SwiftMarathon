@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
+    var questionsAsked = 0
     
     
     override func viewDidLoad() {
@@ -43,30 +44,43 @@ class ViewController: UIViewController {
         buttonTwo.setImage(UIImage(named: countries[1]), for: .normal)
         buttonThree.setImage(UIImage(named: countries[2]), for: .normal)
         
-        title = countries[correctAnswer].uppercased()
+        title = "\(countries[correctAnswer].uppercased()), Score: \(score)"
     }
     
     
     @IBAction func buttonTapped(_ sender: UIButton) {
         var alertTitle: String
+        var alertMessage: String
+        var actionTitle: String
+        questionsAsked += 1
         
         // If correct button is clicked
         if sender.tag == correctAnswer {
             alertTitle = "Correct"
+            alertMessage = "Well done!"
             score += 1
         } else {
             alertTitle = "Wrong"
+            alertMessage = "You chose \(countries[sender.tag].capitalized)"
             score -= 1
         }
         
+        // After 10 questions restart
+        if questionsAsked == 10 {
+            score = 0
+            questionsAsked = 0
+            actionTitle = "Play again"
+        } else {
+            actionTitle = "Continue"
+        }
+        
         // An object that displays an alert message to the user.
-        let ac = UIAlertController(title: alertTitle, message: "Your score is \(score)", preferredStyle: .alert)
-        
+        let acOne = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
         // An action that can be taken when the user taps a button in an alert.
-        ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
-        
+        acOne.addAction(UIAlertAction(title: actionTitle, style: .default, handler: askQuestion))
         // Present alert
-        self.present(ac, animated: true)
+        self.present(acOne, animated: true)
+
     }
     
 
