@@ -13,6 +13,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     
     var webView: WKWebView!
     var progressView: UIProgressView!
+    var safeSites = ["apple.com", "google.com"]
     
     override func loadView() {
         
@@ -41,7 +42,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         
         // Remember that https is required here due to iOS security reasons
-        let url = URL(string: "https://www.google.com")!
+        let url = URL(string: "https://" + safeSites[0])!
         // Has to be URL Request with desired url
         webView.load(URLRequest(url: url))
         // Enables swipe right and left to go forward and back
@@ -51,8 +52,11 @@ class ViewController: UIViewController, WKNavigationDelegate {
     
     @objc func openTapped() {
         let ac = UIAlertController(title: "Open Page", message: nil, preferredStyle: .actionSheet)
-        ac.addAction(UIAlertAction(title: "Apple.com", style: .default, handler: openPage))
-        ac.addAction(UIAlertAction(title: "Google.com", style: .default, handler: openPage))
+        
+        for safeSite in safeSites {
+            ac.addAction(UIAlertAction(title: safeSite, style: .default, handler: openPage))
+        }
+        
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         ac.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(ac, animated: true)
@@ -71,6 +75,24 @@ class ViewController: UIViewController, WKNavigationDelegate {
         if keyPath ==  "estimatedProgress" {
             progressView.progress = Float(webView.estimatedProgress)
         }
+    }
+    
+    // Allows you to decide wheter a navigation is allowed to happen or not
+    // Very nice to implement the functionality to only allow certain pages
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let url = navigationAction.request.url
+        
+        if let host = url?.host {
+            for safeSite in safeSites {
+                if host.contains(safeSite) {
+                    decisionHandler(.allow)
+                    return
+                }
+            }
+        }
+        
+        decisionHandler(.cancel)
+        
     }
 
 
