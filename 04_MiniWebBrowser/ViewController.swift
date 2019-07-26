@@ -13,7 +13,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     
     var webView: WKWebView!
     var progressView: UIProgressView!
-    var safeSites = ["apple.com", "google.com"]
+    var safeSites = ["youtube.com", "google.com"]
     
     override func loadView() {
         
@@ -29,14 +29,18 @@ class ViewController: UIViewController, WKNavigationDelegate {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
         
+        // Add Buttons to Toolbar
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
+        let goBack = UIBarButtonItem(title: "Back",style: .plain, target: webView, action: #selector(webView!.goBack))
+        let goForward = UIBarButtonItem(title: "Forward",style: .plain, target: webView, action: #selector(webView!.goForward))
+        
         
         progressView = UIProgressView(progressViewStyle: .default)
         progressView.sizeToFit()
         let progressButton = UIBarButtonItem(customView: progressView)
         
-        toolbarItems = [progressButton, spacer, refresh]
+        toolbarItems = [goBack, goForward, progressButton, spacer, refresh]
         navigationController?.isToolbarHidden = false
         
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
@@ -81,7 +85,6 @@ class ViewController: UIViewController, WKNavigationDelegate {
     // Very nice to implement the functionality to only allow certain pages
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.url
-        
         if let host = url?.host {
             for safeSite in safeSites {
                 if host.contains(safeSite) {
@@ -92,6 +95,11 @@ class ViewController: UIViewController, WKNavigationDelegate {
         }
         
         decisionHandler(.cancel)
+        
+        // Show alert if it is not allowed
+        let acTwo = UIAlertController(title: "Not allowed sorry", message: nil, preferredStyle: .alert)
+        acTwo.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(acTwo, animated: true)
         
     }
 
