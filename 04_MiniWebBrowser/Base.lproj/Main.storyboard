@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Detail View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="_4_MiniWebBrowser" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebView" id="BYZ-38-t0r" customClass="DetailViewController" customModule="_4_MiniWebBrowser" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -24,7 +24,36 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1047.8260869565217" y="126.5625"/>
+            <point key="canvasLocation" x="451" y="769"/>
+        </scene>
+        <!--Table View Controller-->
+        <scene sceneID="wEh-zi-pWN">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fza-8c-uDs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="VNw-oG-h1u" customClass="TableViewController" customModule="_4_MiniWebBrowser" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="k0P-aR-lhO">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Website" id="i6D-08-47A">
+                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="i6D-08-47A" id="zFd-hu-LuX">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="VNw-oG-h1u" id="fgb-Pg-WrV"/>
+                            <outlet property="delegate" destination="VNw-oG-h1u" id="1N4-P1-w8q"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="ije-ev-r3k"/>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="-880" y="770"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="6Os-6g-v4N">
@@ -37,12 +66,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="bPR-0l-3Fk"/>
+                        <segue destination="VNw-oG-h1u" kind="relationship" relationship="rootViewController" id="0qI-bz-uX5"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6go-lm-zxB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="134.78260869565219" y="771.42857142857144"/>
+            <point key="canvasLocation" x="-1832" y="769"/>
         </scene>
     </scenes>
 </document>

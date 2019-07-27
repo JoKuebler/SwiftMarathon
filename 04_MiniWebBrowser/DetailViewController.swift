@@ -9,11 +9,12 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKNavigationDelegate {
+class DetailViewController: UIViewController, WKNavigationDelegate {
     
     var webView: WKWebView!
     var progressView: UIProgressView!
     var safeSites = ["youtube.com", "google.com"]
+    var loadedPage: String?
     
     override func loadView() {
         
@@ -26,8 +27,6 @@ class ViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
         
         // Add Buttons to Toolbar
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -54,20 +53,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
         
     }
     
-    @objc func openTapped() {
-        let ac = UIAlertController(title: "Open Page", message: nil, preferredStyle: .actionSheet)
-        
-        for safeSite in safeSites {
-            ac.addAction(UIAlertAction(title: safeSite, style: .default, handler: openPage))
-        }
-        
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        ac.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
-        present(ac, animated: true)
-    }
-    
     func openPage(action: UIAlertAction) {
-        let url = URL(string: "https://" + action.title!)!
+        let url = URL(string: "https://" + loadedPage!)!
         webView.load(URLRequest(url: url))
     }
     
