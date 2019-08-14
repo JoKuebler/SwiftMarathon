@@ -17,6 +17,9 @@ class ViewController: UITableViewController {
         
         let urlString: String
         
+        //self.navigationController?.navigationBar.topItem.leftBarButtonItem =
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(showCredits))
+        
         // Load different files depending on tag of TabItem
         if navigationController?.tabBarItem.tag == 0 {
             urlString = "https://www.hackingwithswift.com/samples/petitions-1.json"
@@ -34,6 +37,12 @@ class ViewController: UITableViewController {
         } else {
             showError()
         }
+    }
+    
+    @objc func showCredits() {
+        let ac = UIAlertController(title: "Credits", message: "Data comes from the 'We the people' API of the White House", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
     
     func showError() {
