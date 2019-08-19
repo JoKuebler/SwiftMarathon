@@ -9,11 +9,48 @@
 import UIKit
 
 class ViewController: UITableViewController {
-
+    
     var petitions = [Petition]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Runs selector method and all methods in it in background
+        performSelector(inBackground: #selector(fetchData), with: nil)
+        
+        // COMMENTED OUT TO IMPLEMENT PERFORM SELECTOR BUT MAYBE HELPFUL LATER
+        
+        //          let urlString: String
+        //
+        //          //self.navigationController?.navigationBar.topItem.leftBarButtonItem =
+        //          navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(showCredits))
+        //
+        //          // Load different files depending on tag of TabItem
+        //          if navigationController?.tabBarItem.tag == 0 {
+        //              urlString = "https://www.hackingwithswift.com/samples/petitions-1.json"
+        //          } else {
+        //              urlString = "https://www.hackingwithswift.com/samples/petitions-2.json"
+        //          }
+        //        // Download does not block main thread anymore
+        //        // Never do UIWork on a background thread
+        //        DispatchQueue.global(qos: .userInitiated) .async { [weak self] in
+        //            // Get json date as Data object and parse it
+        //            if let url = URL(string: urlString) {
+        //                if let data = try? Data(contentsOf: url) {
+        //                    // Reload data in this method down below is pushed back to main thread because it is UIWork
+        //                    self?.parseJson(json: data)
+        //                } else {
+        //                    // Show alert in this method down below is pushed back to main thread because it is UIWork
+        //                    self?.showError()
+        //                }
+        //            } else {
+        //                self?.showError()
+        //            }
+        //        }
+        
+    }
+    
+    @objc func fetchData() {
         
         let urlString: String
         
@@ -30,12 +67,14 @@ class ViewController: UITableViewController {
         // Get json date as Data object and parse it
         if let url = URL(string: urlString) {
             if let data = try? Data(contentsOf: url) {
+                // Reload data in this method down below is pushed back to main thread because it is UIWork
                 parseJson(json: data)
             } else {
-                showError()
+                // Calls showError on MainThread using perform selector because it is UI work
+                performSelector(onMainThread: #selector(showError), with: nil, waitUntilDone: false)
             }
         } else {
-            showError()
+            performSelector(onMainThread: #selector(showError), with: nil, waitUntilDone: false)
         }
     }
     
@@ -45,10 +84,10 @@ class ViewController: UITableViewController {
         present(ac, animated: true)
     }
     
-    func showError() {
-        let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading the feed, check connection!", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
+    @objc func showError() {
+            let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading the feed, check connection!", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
     }
     
     func parseJson(json: Data) {
@@ -58,7 +97,11 @@ class ViewController: UITableViewController {
         // Convert Data from Decoder to singles petitions object
         if let jsonPetitions = try? decoder.decode(Petitions.self, from: json) {
             petitions = jsonPetitions.results
-            tableView.reloadData()
+            // Reload table view on mainThread
+            tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
+        } else {
+            // Catches error when error cant be showed
+            performSelector(onMainThread: #selector(showError), with: nil, waitUntilDone: false)
         }
     }
     
@@ -84,6 +127,6 @@ class ViewController: UITableViewController {
         vc.detailItem = petitions[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
     }
-
+    
 }
 
