@@ -18,6 +18,10 @@ class ViewController: UITableViewController {
         // Runs selector method and all methods in it in background
         performSelector(inBackground: #selector(fetchData), with: nil)
         
+        //self.navigationController?.navigationBar.topItem.leftBarButtonItem =
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(showCredits))
+        navigationController?.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(promptForAnswer))
+        
         // COMMENTED OUT TO IMPLEMENT PERFORM SELECTOR BUT MAYBE HELPFUL LATER
         
         //          let urlString: String
@@ -50,12 +54,32 @@ class ViewController: UITableViewController {
         
     }
     
+    @objc func promptForAnswer() {
+        
+        let ac = UIAlertController(title: "Enter answer", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+        let submitAction = UIAlertAction(title: "Submit", style: .default) {
+            [weak self, weak ac] _ in
+            guard let answer = ac?.textFields?[0].text else { return }
+            self?.submit(answer)
+        }
+        
+        ac.addAction(submitAction)
+        present(ac, animated: true)
+    }
+    
+    func submit(_ answer: String) {
+        let lowerAnswer = answer.lowercased()
+        let capitalized = answer.capitalized
+        let filteredArray = petitions.filter { $0.title.contains(lowerAnswer) || $0.title.contains(capitalized)}
+        petitions = filteredArray
+        print(petitions)
+        self.tableView.reloadData()
+    }
+    
     @objc func fetchData() {
         
         let urlString: String
-        
-        //self.navigationController?.navigationBar.topItem.leftBarButtonItem =
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(title: "Credits", style: .plain, target: self, action: #selector(showCredits))
         
         // Load different files depending on tag of TabItem
         if navigationController?.tabBarItem.tag == 0 {
