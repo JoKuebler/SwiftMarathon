@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     var cluesLabel: UILabel!
     var answersLabel: UILabel!
     var currentAnswer: UITextField!
@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     var letterButtons = [UIButton]()
     var activatedButtons = [UIButton]()
     var solutions = [String]()
+    var levelContent: String?
     // Property observer which updates scorelabel whenever the score changes no matter from where the changes come
     var score = 0 {
         didSet {
@@ -194,33 +195,48 @@ class ViewController: UIViewController {
     }
     
     func loadLevel() {
+        performSelector(inBackground: #selector(readFile), with: nil)
+    }
+    
+    @objc func readFile() {
+        guard let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt") else { return }
+        
+        if let levelContents = try? String(contentsOf: levelFileURL) {
+            self.levelContent = levelContents
+            performSelector(onMainThread: #selector(setUI), with: nil, waitUntilDone: false)
+        } else {
+            return
+        }
+    }
+    
+    @objc func setUI() {
+        
         var clueString = ""
         var solutionString = ""
         var letterBits = [String]()
         
-        if let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt") {
-            if let levelContents = try? String(contentsOf: levelFileURL) {
-                var lines = levelContents.components(separatedBy: "\n")
-                lines.shuffle()
+        if let levelContents = self.levelContent {
+            var lines = levelContents.components(separatedBy: "\n")
+            lines.shuffle()
+            
+            for (index, line) in lines.enumerated() {
+                let parts = line.components(separatedBy: ": ")
+                let answer = parts[0]
+                let clue = parts[1]
                 
-                for (index, line) in lines.enumerated() {
-                    let parts = line.components(separatedBy: ": ")
-                    let answer = parts[0]
-                    let clue = parts[1]
-                    
-                    clueString += "\(index + 1). \(clue)\n"
-                    
-                    let solutionWord = answer.replacingOccurrences(of: "|", with: "")
-                    solutionString += "\(solutionWord.count) letters\n"
-                    solutions.append(solutionWord)
-                    
-                    let bits = answer.components(separatedBy: "|")
-                    letterBits += bits
-                    
-                }
+                clueString += "\(index + 1). \(clue)\n"
+                
+                let solutionWord = answer.replacingOccurrences(of: "|", with: "")
+                solutionString += "\(solutionWord.count) letters\n"
+                solutions.append(solutionWord)
+                
+                let bits = answer.components(separatedBy: "|")
+                letterBits += bits
                 
             }
+            
         }
+        
         
         cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
         answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -232,9 +248,9 @@ class ViewController: UIViewController {
                 letterButtons[i].setTitle(letterBits[i], for: .normal)
             }
         }
-
+        
     }
-
-
+    
+    
 }
 
