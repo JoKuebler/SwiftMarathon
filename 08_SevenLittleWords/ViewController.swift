@@ -17,7 +17,12 @@ class ViewController: UIViewController {
     var letterButtons = [UIButton]()
     var activatedButtons = [UIButton]()
     var solutions = [String]()
-    var score = 0
+    // Property observer which updates scorelabel whenever the score changes no matter from where the changes come
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "Score: \(score)"
+        }
+    }
     var level = 1
     
     override func loadView() {
