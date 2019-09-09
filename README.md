@@ -41,3 +41,8 @@ This project covers advanced AutoLayout topics such as **NSLayoutConstraints**, 
 ### 08_SevenLittleWords (iPad only)
 
 In this project I build an **UIKit** user interface for the iPad programtically including **NSLayoutConstraints**, adding **Target Functions** to Buttons, loading data via **PerformSelector** and different **Array handling** functions.
+
+### 09_NameToFaces
+
+This project enables the user to upload pictures and name then via a editable texfield. It covers the **UICollectionView**, custom **UICollectionViewCell**, **UIImagePickerController** and more.
+
