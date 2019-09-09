@@ -1,4 +1,16 @@
-# Swift Marathon
+<h1 align="center">
+  Swift Marathon
+</h1>
+<p align="center">
+    <a href="https://swift.org/documentation/">
+    <img src="https://img.shields.io/badge/Swift-5.0-orange.svg" />
+    </a>
+    <a href="https://www.reddit.com/user/JDK_92">
+        <img src="https://img.shields.io/badge/contact-@jdk_92-blue.svg?style=flat" alt="Twitter: @johnsundell" />
+    </a>
+</p>
+
+I went through [100 Days of Swift](https://www.hackingwithswift.com/100) by Paul Hudson the creator of [Hacking with Swift](https://www.hackingwithswift.com/). The free collection of videos, tutorials and tests teaches Swift beginners a huge collection of different topics across the board. If you are looking for an overview  in Swift to get your iOS development going, I highly recommend this course. It is setup to take about 1 hour a day for 100 days. It is definitely worth the work!
 
 ## 02_MiniGameFlags
 
