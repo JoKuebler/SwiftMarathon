@@ -1,3 +1,5 @@
+# Swift Marathon
+
 ## 02_MiniGameFlags
 
 Small flag guessing game covering **AutoLayout**, **UIButtons**, **UIAlertControllers** and more.
