@@ -17,7 +17,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
         
     }
-
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return people.count
     }
@@ -45,6 +45,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let person = people[indexPath.item]
         
+        // First collection view controller to rename person
         let ac = UIAlertController(title: "Rename person", message: nil, preferredStyle: .alert)
         ac.addTextField()
         
@@ -54,8 +55,19 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
             self?.collectionView.reloadData()
         })
         
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(ac, animated: true)
+        // Second collection view controller to rename person
+        let acTwo = UIAlertController(title: "What do you want to do?", message: nil, preferredStyle: .alert)
+        acTwo.addAction(UIAlertAction(title: "Delete", style: .default) { [weak self] _ in
+            self?.people.remove(at: indexPath.item)
+            self?.collectionView.deleteItems(at: [indexPath])
+        })
+        
+        acTwo.addAction(UIAlertAction(title: "Rename", style: .default) { [weak self] _ in
+            self?.present(ac, animated: true)
+        })
+        
+        acTwo.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(acTwo, animated: true)
     }
     
     @objc func addNewPerson() {
@@ -63,6 +75,10 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         picker.allowsEditing = true
         picker.delegate = self
         present(picker, animated: true)
+    }
+    
+    @objc func deleteCell() {
+        
     }
     
     // Is called when user chose image
@@ -92,6 +108,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
     }
-
+    
 }
+
 
