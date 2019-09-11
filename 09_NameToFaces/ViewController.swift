@@ -70,15 +70,18 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         present(acTwo, animated: true)
     }
     
+    // Presents the image picker by checking if camers is available or simulator is ran
     @objc func addNewPerson() {
         let picker = UIImagePickerController()
         picker.allowsEditing = true
         picker.delegate = self
-        present(picker, animated: true)
-    }
-    
-    @objc func deleteCell() {
         
+        // camera only available on real devices
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.sourceType = .camera
+        }
+        
+        present(picker, animated: true)
     }
     
     // Is called when user chose image
