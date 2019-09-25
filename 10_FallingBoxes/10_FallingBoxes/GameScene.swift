@@ -11,7 +11,7 @@ import SpriteKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var scoreLabel: SKLabelNode!
-    
+
     var score = 0 {
         didSet {
             scoreLabel.text = "Score: \(score)"
@@ -91,8 +91,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 addChild(box)
             } else {
                 
+                // chose random color for balls
+                let colors = ["ballRed", "ballYellow", "ballBlue", "ballCyan", "ballGreen", "ballPurple"]
+                
                 // Create box as new sprite node whereever user touched
-                let ball = SKSpriteNode(imageNamed: "ballRed")
+                let ball = SKSpriteNode(imageNamed: colors.randomElement()!)
                 ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2.0)
                 // Bounciness from 0 to 1 (superbouncy)
                 ball.physicsBody?.restitution = 0.4
