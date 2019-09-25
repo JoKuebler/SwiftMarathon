@@ -12,7 +12,8 @@ class ViewController: UITableViewController {
     
     var pictures = [String]()
     var sortedPictures = [String]()
-
+    var countViews = [String: Int]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -29,6 +30,16 @@ class ViewController: UITableViewController {
                 pictures.append(item)
             }
         }
+        
+        // Initialize UserDefaults and read data if already stored
+        let defaults = UserDefaults.standard
+        if let savedCounts = defaults.object(forKey: "views") as? Data {
+            if let decodedViews = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedCounts) as? [String: Int] {
+                countViews = decodedViews
+            }
+        }
+        
+        print(countViews)
         
         sortedPictures = pictures.sorted()
         
@@ -52,11 +63,29 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
+            
+            // Count views and store them into dictionary
+            if let _ = countViews[sortedPictures[indexPath.row].description] {
+                countViews[sortedPictures[indexPath.row].description]! += 1
+            } else {
+                countViews[sortedPictures[indexPath.row].description] = 1
+            }
+            
+            save()
+            
             vc.selectedImage = sortedPictures[indexPath.row]
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-
-
+    
+    // save countviews in user defaults
+    func save() {
+        if let saveData = try? NSKeyedArchiver.archivedData(withRootObject: countViews, requiringSecureCoding: false) {
+             let defaults = UserDefaults.standard
+             defaults.set(saveData, forKey: "views")
+         }
+    }
+    
+    
 }
 
