@@ -16,6 +16,14 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
         
+        // Initialize UserDefaults and read data if already stored
+        let defaults = UserDefaults.standard
+        if let savedPeople = defaults.object(forKey: "people") as? Data {
+            if let decodedPeople = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedPeople) as? [Person] {
+                people = decodedPeople
+            }
+        }
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -29,6 +37,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         
         let person = people[indexPath.item]
         cell.label.text = person.name
+        cell.label.textColor = .black
         
         // Get image file and set it to imageview
         let path = getDocumentsDirectory().appendingPathComponent(person.image)
@@ -52,6 +61,8 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak ac] _ in
             guard let newName = ac?.textFields?[0].text else { return }
             person.name = newName
+            // Save to user defaults
+            self?.save()
             self?.collectionView.reloadData()
         })
         
@@ -100,6 +111,8 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         
         let person = Person(name: "Unknown", image: imageName)
         people.append(person)
+        // Save to user defaults
+        save()
         collectionView.reloadData()
         
         // Image Picker has to be dismissed when done
@@ -110,6 +123,14 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
+    }
+    
+    // Takes people and saves it to user defaults
+    func save() {
+        if let saveData = try? NSKeyedArchiver.archivedData(withRootObject: people, requiringSecureCoding: false) {
+            let defaults = UserDefaults.standard
+            defaults.set(saveData, forKey: "people")
+        }
     }
     
 }
