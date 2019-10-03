@@ -80,6 +80,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="uep-Z2-S8S"/>
                     <connections>
+                        <outlet property="changeFilterButton" destination="u0b-ea-T5M" id="ARY-Qb-uLJ"/>
                         <outlet property="imageView" destination="AKN-Ov-w9z" id="xoE-U8-PMy"/>
                         <outlet property="intensity" destination="F5T-N2-bzy" id="Fu8-0D-DJP"/>
                     </connections>
