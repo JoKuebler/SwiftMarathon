@@ -44,8 +44,12 @@ In this project I build an **UIKit** user interface for the iPad programtically 
 
 ### 09_NameToFaces
 
-This project enables the user to upload pictures and name then via a editable texfield. It covers the **UICollectionView**, custom **UICollectionViewCell**, **UIImagePickerController** and more.
+This project enables the user to upload pictures and name then via a editable texfield. It covers the **UICollectionView**, custom **UICollectionViewCell**, **UIImagePickerController** and more. Later in the course, **UserDefaults** are added to this project in order to store data.
 
 ### 10_FallingBoxes (iPad only)
 
 This project introduces Apples **SpriteKit**. Learn using **SKSpriteNode**, **SKPhysicsBody**, **SKAction** and more by implementing a small game which challenges the user to drop balls from top of the screen into the right area.
+
+### 11_ImageEditor
+
+Learn how to work with **CIContext** and **CIFilter** and build a small image editor using different filters of Apples **CoreImage** framework.
