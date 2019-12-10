@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/badge/Swift-5.0-orange.svg" />
     </a>
     <a href="https://www.reddit.com/user/JDK_92">
-        <img src="https://img.shields.io/badge/contact-@jdk_92-blue.svg?style=flat" alt="Twitter: @johnsundell" />
+        <img src="https://img.shields.io/badge/contact-@jdk_92-blue.svg?style=flat" />
     </a>
 </p>
 
